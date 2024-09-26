@@ -1,2 +1,7 @@
-class OpenWeather {}
+class OpenWeather {
+  Future<void> openWeatherApi () async {
+
+
+  }
+}
  
