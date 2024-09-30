@@ -24,6 +24,15 @@ class _MainScreenState extends State<MainScreen> {
             TextField(
               controller: _searchController,
               focusNode: _searchFocus,
+              onChanged: (value) {
+                setState(() {
+                  if (value == '' || value.isEmpty) {
+                    _currentCity = 'karachi';
+                  } else {
+                    _currentCity = value;
+                  }
+                });
+              },
               onTapOutside: (event) {
                 _searchFocus.unfocus();
               },
@@ -48,20 +57,23 @@ class _MainScreenState extends State<MainScreen> {
                       ]),
                     );
                   } else if (snapshot.hasError) {
-                    return Center(
-                      child: Column(children: [
-                        Text(snapshot.error.toString()),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.refresh, size: 40, color: AppColors.secondary),
-                        )
-                      ]),
+                    return const Center(
+                      child: Text('No City exist'),
                     );
                   } else if (snapshot.hasData) {
                     final data = snapshot.data;
-                    return Text(data?.main!.temp.toString() ?? '');
+                    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Text('${data?.main!.temp} °c',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 110,
+                          )),
+                      Text(_currentCity.capitalize,
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 110,
+                          ))
+                    ]);
                   } else {
                     return const Placeholder();
                   }
