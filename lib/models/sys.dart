@@ -1,9 +1,9 @@
 class Sys {
-  int? type;
-  int? id;
+  num? type;
+  num? id;
   String? country;
-  int? sunrise;
-  int? sunset;
+  num? sunrise;
+  num? sunset;
 
   Sys({this.type, this.id, this.country, this.sunrise, this.sunset});
 

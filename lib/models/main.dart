@@ -1,12 +1,12 @@
 class Main {
-  double? temp;
-  int? feelsLike;
-  double? tempMin;
-  double? tempMax;
-  int? pressure;
-  int? humidity;
-  int? seaLevel;
-  int? grndLevel;
+  num? temp;
+  num? feelsLike;
+  num? tempMin;
+  num? tempMax;
+  num? pressure;
+  num? humidity;
+  num? seaLevel;
+  num? grndLevel;
 
   Main(
       {this.temp,
