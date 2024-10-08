@@ -32,6 +32,14 @@ class CitiesLogics {
   static Future<void> addUserAddedCityList({required String addCity}) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     List<String> cityList = await getUserAddedCityList();
-    
+    cityList.add(addCity);
+    sp.setStringList('userAddedCities', cityList);
+  }
+
+  static Future<void> deleteUserAddedCityList({required String deleteCity}) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    List<String> cityList = await getUserAddedCityList();
+    cityList.remove(deleteCity);
+    sp.setStringList('userAddedCities', cityList);
   }
 }
