@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CitiesLogics {
@@ -17,7 +16,22 @@ class CitiesLogics {
       return displayedCity;
     }
   }
-  
-  
 
+  static Future<List<String>> getUserAddedCityList() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    List<String>? cityList = sp.getStringList('userAddedCities');
+    if (cityList == null) {
+      String currentCity = await getCurrentDisplayedCity();
+      sp.setStringList('userAddedCities', [currentCity]);
+      return [currentCity];
+    } else {
+      return cityList;
+    }
+  }
+
+  static Future<void> addUserAddedCityList({required String addCity}) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    List<String> cityList = await getUserAddedCityList();
+    
+  }
 }
