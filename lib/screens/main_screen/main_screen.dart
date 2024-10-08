@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_flutter/apis/open_weather_api.dart';
+import 'package:weather_app_flutter/logic/cities_logics.dart';
 import 'package:weather_app_flutter/models/current_weather.dart';
 import 'package:weather_app_flutter/utils/color.dart';
 import 'package:weather_app_flutter/utils/images.dart';
