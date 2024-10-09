@@ -3,10 +3,7 @@ import 'package:weather_app_flutter/apis/open_weather_api.dart';
 import 'package:weather_app_flutter/logic/cities_logics.dart';
 import 'package:weather_app_flutter/models/current_weather.dart';
 import 'package:weather_app_flutter/screens/main_screen/widgets.dart';
-import 'package:weather_app_flutter/utils/color.dart';
 import 'package:weather_app_flutter/utils/images.dart';
-import 'package:weather_app_flutter/utils/text.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,10 +13,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late String displayedCity;
+  late CurrentWeather waitingData;
   bool _isLoading = false;
 
   Future<void> setDisplayedCity() async {
     displayedCity = await CitiesLogics.getCurrentDisplayedCity();
+    waitingData = CurrentWeather.fromJson(await CitiesLogics.getOldDataForWhileLoading());
     setState(() {
       _isLoading = true;
     });
@@ -49,7 +48,14 @@ class _MainScreenState extends State<MainScreen> {
                   future: OpenWeather.openWeatherApi(city: displayedCity),
                   builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return TempDisplayWidget(
+                        cityName: waitingData.name!,
+                        temp: waitingData.main!.temp!.toInt().toString(),
+                        weather: waitingData.weather![0].main!,
+                        high: waitingData.main!.tempMax!.toInt().toString(),
+                        low: waitingData.main!.tempMin!.toInt().toString(),
+                        feelsLike: waitingData.main!.feelsLike!.toInt().toString(),
+                      );
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Column(
@@ -63,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       );
                     } else if (snapshot.hasData) {
+                      CitiesLogics.setOldDataForWhileLoading(saveData: snapshot.data!.toJson());
                       return TempDisplayWidget(
                         cityName: snapshot.data!.name!,
                         temp: snapshot.data!.main!.temp!.toInt().toString(),
