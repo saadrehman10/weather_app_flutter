@@ -1,5 +1,5 @@
 class MainPageText {
-  static const String forecast = 'forecast';
+  static const String forecast = 'Weather Update';
 }
 
 extension Capitalized on String {

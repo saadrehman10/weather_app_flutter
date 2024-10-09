@@ -97,28 +97,50 @@ class _MainScreenState extends State<MainScreen> {
           FrostedGlassBox(
             theWidth: screenWidth,
             theHeight: screenHeight * .37,
-            theChild: Column(
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      MainPageText.forecast,
-                      style: TextStyle(
-                        color: AppColors.quaternary,
-                        fontSize: 20,
-                      ),
+            theChild: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Text(
+                    MainPageText.forecast,
+                    style: TextStyle(
+                      color: AppColors.quaternary,
+                      fontSize: 20,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    ForecastTile(),
-                  ],
-                )
-              ],
+                  ),
+                  _isLoading
+                      ? FutureBuilder(
+                          future: OpenWeather.openWeatherApi(city: displayedCity),
+                          builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Column(
+                                  children: [
+                                    Text(snapshot.error.toString()),
+                                    IconButton(
+                                      onPressed: () => setState(() {}),
+                                      icon: Icon(Icons.refresh),
+                                    )
+                                  ],
+                                ),
+                              );
+                            } else if (snapshot.hasData) {
+                              return Column(
+                                children: [
+                                  
+                                ],
+                              );
+                            } else {
+                              return const Placeholder();
+                            }
+                          })
+                      : Text(''),
+                ],
+              ),
             ),
           ),
         ],
