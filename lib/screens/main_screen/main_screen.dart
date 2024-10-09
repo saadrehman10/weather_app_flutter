@@ -13,121 +13,61 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocus = FocusNode();
-  String _currentCity = 'karachi';
+  late String displayedCity;
+  bool _isLoading = false;
+
+  Future<void> setDisplayedCity() async {
+    displayedCity = await CitiesLogics.getCurrentDisplayedCity();
+    setState(() {
+      _isLoading = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setDisplayedCity();
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        padding: const EdgeInsets.all(20),
+        height: screenHeight,
+        width: screenWidth,
+        decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(AppImages.backgroundImage), fit: BoxFit.fill),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TextField(
-              controller: _searchController,
-              focusNode: _searchFocus,
-              onChanged: (value) {
-                setState(() {
-                  if (value == '' || value.isEmpty) {
-                    _currentCity = 'karachi';
-                  } else {
-                    _currentCity = value;
-                  }
-                });
-              },
-              onTapOutside: (event) {
-                _searchFocus.unfocus();
-              },
-              style: const TextStyle(color: AppColors.primary),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                hintText: 'Search City',
-                hintStyle: const TextStyle(color: AppColors.primary),
-              ),
-            ),
-            FutureBuilder(
-                future: OpenWeather.openWeatherApi(city: _currentCity),
-                builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(30),
-                        child: Column(children: [
-                          CircularProgressIndicator(
-                            color: AppColors.primary,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            MainPageText.loading,
-                            style: TextStyle(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ]),
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Center(
-                      child: Text(
-                        'No City exist',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 100,
-                        ),
-                      ),
-                    );
-                  } else if (snapshot.hasData) {
-                    final data = snapshot.data;
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(children: [
+          _isLoading
+              ? FutureBuilder(
+                  future: OpenWeather.openWeatherApi(city: displayedCity),
+                  builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('');
+                    } else if (snapshot.hasError) {
+                      setState(() {});
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else if (snapshot.hasData) {
+                      return Column(
                         children: [
-                          Text('${data?.main!.temp} °c',
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 110,
-                              )),
-                          Text(data?.weather![0].main ?? 'No main',
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 30,
-                              )),
-                          Text(_currentCity.capitalize,
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 50,
-                              )),
-                          Row(
-                            children: [
-                              Text(
-                                'H: ${data?.main!.tempMax.toString() ?? 'no max tep'} °c',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'L: ${data?.main!.tempMin.toString() ?? 'no min tep'} °c',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            displayedCity.capitalize,
+                            style: TextStyle(fontSize: 30),
                           ),
-                        ]);
-                  } else {
-                    return const Placeholder();
-                  }
-                }),
-          ]),
-        ),
+                        ],
+                      );
+                    } else {
+                      return const Placeholder();
+                    }
+                  })
+              : Text(''),
+        ]),
       ),
     );
   }
