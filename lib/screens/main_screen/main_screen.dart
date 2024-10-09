@@ -3,7 +3,9 @@ import 'package:weather_app_flutter/apis/open_weather_api.dart';
 import 'package:weather_app_flutter/logic/cities_logics.dart';
 import 'package:weather_app_flutter/models/current_weather.dart';
 import 'package:weather_app_flutter/screens/main_screen/widgets.dart';
+import 'package:weather_app_flutter/utils/color.dart';
 import 'package:weather_app_flutter/utils/images.dart';
+import 'package:weather_app_flutter/utils/text.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -74,6 +76,7 @@ class _MainScreenState extends State<MainScreen> {
                           );
                         } else if (snapshot.hasData) {
                           CitiesLogics.setOldDataForWhileLoading(saveData: snapshot.data!.toJson());
+                          waitingData = snapshot.data!;
                           return TempDisplayWidget(
                             cityName: snapshot.data!.name!,
                             temp: snapshot.data!.main!.temp!.toInt().toString(),
@@ -87,14 +90,30 @@ class _MainScreenState extends State<MainScreen> {
                         }
                       })
                   : Text(''),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               Image.asset(AppImages.house),
             ]),
           ),
           FrostedGlassBox(
             theWidth: screenWidth,
-            theHeight: screenHeight * .4,
-            theChild: null,
+            theHeight: screenHeight * .37,
+            theChild: Column(
+              children: [
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      MainPageText.forecast,
+                      style: TextStyle(
+                        color: AppColors.quaternary,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
