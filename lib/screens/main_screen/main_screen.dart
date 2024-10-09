@@ -36,7 +36,6 @@ class _MainScreenState extends State<MainScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
         height: screenHeight,
         width: screenWidth,
         decoration: BoxDecoration(
@@ -48,13 +47,16 @@ class _MainScreenState extends State<MainScreen> {
                   future: OpenWeather.openWeatherApi(city: displayedCity),
                   builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return TempDisplayWidget(
-                        cityName: waitingData.name!,
-                        temp: waitingData.main!.temp!.toInt().toString(),
-                        weather: waitingData.weather![0].main!,
-                        high: waitingData.main!.tempMax!.toInt().toString(),
-                        low: waitingData.main!.tempMin!.toInt().toString(),
-                        feelsLike: waitingData.main!.feelsLike!.toInt().toString(),
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+                        child: TempDisplayWidget(
+                          cityName: waitingData.name!,
+                          temp: waitingData.main!.temp!.toInt().toString(),
+                          weather: waitingData.weather![0].main!,
+                          high: waitingData.main!.tempMax!.toInt().toString(),
+                          low: waitingData.main!.tempMin!.toInt().toString(),
+                          feelsLike: waitingData.main!.feelsLike!.toInt().toString(),
+                        ),
                       );
                     } else if (snapshot.hasError) {
                       return Center(
@@ -70,13 +72,16 @@ class _MainScreenState extends State<MainScreen> {
                       );
                     } else if (snapshot.hasData) {
                       CitiesLogics.setOldDataForWhileLoading(saveData: snapshot.data!.toJson());
-                      return TempDisplayWidget(
-                        cityName: snapshot.data!.name!,
-                        temp: snapshot.data!.main!.temp!.toInt().toString(),
-                        weather: snapshot.data!.weather![0].main!,
-                        high: snapshot.data!.main!.tempMax!.toInt().toString(),
-                        low: snapshot.data!.main!.tempMin!.toInt().toString(),
-                        feelsLike: snapshot.data!.main!.feelsLike!.toInt().toString(),
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
+                        child: TempDisplayWidget(
+                          cityName: snapshot.data!.name!,
+                          temp: snapshot.data!.main!.temp!.toInt().toString(),
+                          weather: snapshot.data!.weather![0].main!,
+                          high: snapshot.data!.main!.tempMax!.toInt().toString(),
+                          low: snapshot.data!.main!.tempMin!.toInt().toString(),
+                          feelsLike: snapshot.data!.main!.feelsLike!.toInt().toString(),
+                        ),
                       );
                     } else {
                       return const Placeholder();
@@ -86,7 +91,15 @@ class _MainScreenState extends State<MainScreen> {
           const SizedBox(height: 30),
           Stack(
             children: [
-              Image.asset(AppImages.house),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(AppImages.house),
+              ),
+              FrostedGlassBox(
+                theWidth: screenWidth,
+                theHeight: screenHeight * .4,
+                theChild: Column(children: []),
+              ),
             ],
           )
         ]),
