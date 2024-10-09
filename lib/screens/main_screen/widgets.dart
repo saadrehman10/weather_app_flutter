@@ -48,6 +48,53 @@ class FrostedGlassBox extends StatelessWidget {
   }
 }
 
+class ForecastTile extends StatelessWidget {
+  const ForecastTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        width: 20,
+        height: 100,
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 25,
+                sigmaY: 25,
+              ),
+              child: Container(),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: Colors.white.withOpacity(0.13)),
+                  gradient: LinearGradient(
+                    colors: [Color(0xff5936B4).withOpacity(.7), Color(0xff362A84).withOpacity(.35)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )),
+            ),
+            Center(
+                child: Column(
+              children: [
+                  Text('12:30'),
+                  Spacer(),
+                  Spacer(),
+                  
+
+              ],
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class TempDisplayWidget extends StatelessWidget {
   final String cityName, temp, weather, high, low, feelsLike;
   const TempDisplayWidget(
