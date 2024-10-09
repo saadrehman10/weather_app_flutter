@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_app_flutter/apis/open_weather_api.dart';
 import 'package:weather_app_flutter/logic/cities_logics.dart';
 import 'package:weather_app_flutter/models/current_weather.dart';
+import 'package:weather_app_flutter/screens/main_screen/widgets.dart';
 import 'package:weather_app_flutter/utils/color.dart';
 import 'package:weather_app_flutter/utils/images.dart';
 import 'package:weather_app_flutter/utils/text.dart';
@@ -62,65 +63,13 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       );
                     } else if (snapshot.hasData) {
-                      return Column(
-                        children: [
-                          Text(
-                            snapshot.data!.name!.capitalize,
-                            style: GoogleFonts.nunito(
-                              fontSize: 50,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            '${snapshot.data!.main!.temp!.toInt()}°',
-                            style: GoogleFonts.nunito(
-                              fontSize: 110,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
-                          Text(
-                            'Mostly ${snapshot.data!.weather![0].main!.capitalize}',
-                            style: GoogleFonts.nunito(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.tertiary,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Feels Like :  ${snapshot.data!.main!.feelsLike!.toInt()} °',
-                            style: GoogleFonts.nunito(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'H : ${snapshot.data!.main!.tempMax}°',
-                                style: GoogleFonts.nunito(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'L : ${snapshot.data!.main!.tempMin}°',
-                                style: GoogleFonts.nunito(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.primary,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
+                      return TempDisplayWidget(
+                        cityName: snapshot.data!.name!,
+                        temp: snapshot.data!.main!.temp!.toInt().toString(),
+                        weather: snapshot.data!.weather![0].main!,
+                        high: snapshot.data!.main!.tempMax!.toInt().toString(),
+                        low: snapshot.data!.main!.tempMin!.toInt().toString(),
+                        feelsLike: snapshot.data!.main!.feelsLike!.toInt().toString(),
                       );
                     } else {
                       return const Placeholder();
@@ -131,7 +80,6 @@ class _MainScreenState extends State<MainScreen> {
           Stack(
             children: [
               Image.asset(AppImages.house),
-              
             ],
           )
         ]),

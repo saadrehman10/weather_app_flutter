@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,5 +53,17 @@ class CitiesLogics {
       debugPrint('Deleted city don\'t exist');
       throw Exception('Deleted city don\'t exist');
     }
+  }
+
+  static Future<void> setOldDataForWhileLoading({required Map<String, dynamic> saveData}) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    final String jsonEncodedData = jsonEncode(saveData);
+    sp.setString('oldData', jsonEncodedData);
+  }
+
+  static Future<Map<String, dynamic>> getOldDataForWhileLoading() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    final Map<String, dynamic> jsonDecodedData = jsonDecode(sp.getString('oldData')!);
+    return jsonDecodedData;
   }
 }
