@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -56,15 +58,21 @@ class ForecastTile extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
       child: Container(
-        width: 20,
-        height: 100,
-        color: Colors.transparent,
+        decoration: BoxDecoration(color: Colors.transparent, boxShadow: [
+          BoxShadow(
+            offset: Offset(20, 20),
+            blurRadius: 100,
+            color: Colors.black,
+          )
+        ]),
+        width: 70,
+        height: 180,
         child: Stack(
           children: [
             BackdropFilter(
               filter: ImageFilter.blur(
-                sigmaX: 25,
-                sigmaY: 25,
+                sigmaX: 30,
+                sigmaY: 30,
               ),
               child: Container(),
             ),
@@ -73,19 +81,15 @@ class ForecastTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                   border: Border.all(color: Colors.white.withOpacity(0.13)),
                   gradient: LinearGradient(
-                    colors: [Color(0xff5936B4).withOpacity(.7), Color(0xff362A84).withOpacity(.35)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    colors: [Color(0xff5936B4).withOpacity(.8), Color(0xff362A84).withOpacity(.4)],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
                   )),
             ),
             Center(
                 child: Column(
               children: [
-                  Text('12:30'),
-                  Spacer(),
-                  Spacer(),
-                  
-
+                Text('12:30'),
               ],
             )),
           ],
