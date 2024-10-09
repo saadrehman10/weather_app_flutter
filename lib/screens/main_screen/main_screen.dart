@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
         height: screenHeight,
         width: screenWidth,
         decoration: BoxDecoration(
@@ -65,19 +65,61 @@ class _MainScreenState extends State<MainScreen> {
                       return Column(
                         children: [
                           Text(
-                            displayedCity.capitalize,
+                            snapshot.data!.name!.capitalize,
                             style: GoogleFonts.nunito(
-                              fontSize: 40,
+                              fontSize: 50,
                               color: AppColors.primary,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           Text(
-                            '${snapshot.data!.main!.temp}°',
+                            '${snapshot.data!.main!.temp!.toInt()}°',
                             style: GoogleFonts.nunito(
-                              fontSize: 100,
+                              fontSize: 110,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                          Text(
+                            'Mostly ${snapshot.data!.weather![0].main!.capitalize}',
+                            style: GoogleFonts.nunito(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.tertiary,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Feels Like :  ${snapshot.data!.main!.feelsLike!.toInt()} °',
+                            style: GoogleFonts.nunito(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
                               color: AppColors.primary,
                             ),
                           ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'H : ${snapshot.data!.main!.tempMax}°',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                'L : ${snapshot.data!.main!.tempMin}°',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.primary,
+                                ),
+                              )
+                            ],
+                          )
                         ],
                       );
                     } else {
@@ -85,6 +127,13 @@ class _MainScreenState extends State<MainScreen> {
                     }
                   })
               : Text(''),
+          const SizedBox(height: 30),
+          Stack(
+            children: [
+              Image.asset(AppImages.house),
+              
+            ],
+          )
         ]),
       ),
     );
