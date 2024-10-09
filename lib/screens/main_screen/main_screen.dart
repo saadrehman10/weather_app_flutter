@@ -5,6 +5,7 @@ import 'package:weather_app_flutter/models/current_weather.dart';
 import 'package:weather_app_flutter/utils/color.dart';
 import 'package:weather_app_flutter/utils/images.dart';
 import 'package:weather_app_flutter/utils/text.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -47,18 +48,35 @@ class _MainScreenState extends State<MainScreen> {
                   future: OpenWeather.openWeatherApi(city: displayedCity),
                   builder: (context, AsyncSnapshot<CurrentWeather> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text('');
+                      return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      setState(() {});
                       return Center(
-                        child: Text(snapshot.error.toString()),
+                        child: Column(
+                          children: [
+                            Text(snapshot.error.toString()),
+                            IconButton(
+                              onPressed: () => setState(() {}),
+                              icon: Icon(Icons.refresh),
+                            )
+                          ],
+                        ),
                       );
                     } else if (snapshot.hasData) {
                       return Column(
                         children: [
                           Text(
                             displayedCity.capitalize,
-                            style: TextStyle(fontSize: 30),
+                            style: GoogleFonts.nunito(
+                              fontSize: 40,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Text(
+                            '${snapshot.data!.main!.temp}°',
+                            style: GoogleFonts.nunito(
+                              fontSize: 100,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ],
                       );
